@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { useGetDirectors } from "./hooks/useGetDirectors";
 import { Skull } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 
 export default function Directores() {
   const {
@@ -12,10 +13,6 @@ export default function Directores() {
     loading: loadingGetDirectos,
     error: errorGetDirectos,
   } = useGetDirectors();
-
-  if (loadingGetDirectos) {
-    return <div>Cargando...</div>;
-  }
 
   return (
     <div className="flex h-full w-full flex-col p-6 gap-8">
@@ -28,9 +25,19 @@ export default function Directores() {
         </h2>
       )}
 
+      {loadingGetDirectos && (
+        <div className="col-span-2 flex items-center justify-center fixed inset-0 bg-var--gris-base bg-background/80 z-50">
+          <Loader />
+        </div>
+      )}
+
       {!errorGetDirectos && (
         <>
-          <DataTable data={getDirectors} columns={columns({})} />
+          <DataTable
+            data={getDirectors}
+            columns={columns({})}
+            isLoading={loadingGetDirectos}
+          />
         </>
       )}
     </div>
