@@ -1,22 +1,27 @@
 import { useState, useEffect } from "react";
 import { Director } from "../types";
 
-export const useGetDirectors = (update: boolean) => {
-  const [getDirectors, setGetDirectors] = useState<Director[]>([]);
+export const useGetDirectorById = (id: string | null) => {
+  const [director, setDirector] = useState<Director | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchDirectores = async () => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchDirector = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/directores`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/directores/${id}`
         );
         if (!response.ok) {
-          throw new Error("Error al obtener los directores");
+          throw new Error("Error al obtener el director");
         }
         const data = await response.json();
-        setGetDirectors(data);
+        setDirector(data[0]);
       } catch (error: any) {
         setError(true);
       } finally {
@@ -24,8 +29,8 @@ export const useGetDirectors = (update: boolean) => {
       }
     };
 
-    fetchDirectores();
-  }, [update]);
+    fetchDirector();
+  }, [id]);
 
-  return { getDirectors, loading, error };
+  return { director, loading, error };
 };

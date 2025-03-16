@@ -1,9 +1,16 @@
 export interface Director {
   id: number;
   nombres: string;
-  estado: number;
+  estado: string;
   fecha_creacion: number;
   fecha_actualizacion: number;
 }
 
-export interface ColumnsProps {}
+export interface UpdateAndCreateFormProps {
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+export interface ColumnsProps {
+  handleOpenForm: (id: string) => void;
+}

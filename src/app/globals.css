@@ -99,3 +99,7 @@
   border-top-color: #8a34db;
   animation: spin 1s linear infinite;
 }
+
+.text-error {
+  @apply text-red-400;
+}
