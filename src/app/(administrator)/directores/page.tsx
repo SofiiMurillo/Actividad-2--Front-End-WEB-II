@@ -6,24 +6,27 @@ import { columns } from "./columns";
 import { useGetDirectors } from "./hooks/useGetDirectors";
 import { Skull } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
-import { useState } from "react";
-import { CardWithForm } from "./components/CardWithForm";
+import { useState, useEffect } from "react";
+import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
 
 const DirectorsPage = () => {
   const [update, setUpdate] = useState(false);
   const { getDirectors, loading, error } = useGetDirectors(update);
   const [showForm, setShowForm] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const handleSuccess = () => {
     setUpdate(!update);
   };
 
-  const handleOpenForm = () => {
+  const handleOpenForm = (id?: string) => {
+    setSelectedId(id || null);
     setShowForm(true);
   };
 
   const handleCloseForm = () => {
     setShowForm(false);
+    setSelectedId(null);
   };
 
   return (
@@ -48,22 +51,23 @@ const DirectorsPage = () => {
           <Button
             className="w-50 bg-gray-800 hover:bg-gray-700 text-white cursor-pointer font-bold"
             variant={"default"}
-            onClick={handleOpenForm}
+            onClick={() => handleOpenForm()}
           >
             Agregar nuevo director
           </Button>
           <DataTable
             data={getDirectors}
-            columns={columns({})}
+            columns={columns({ handleOpenForm })}
             isLoading={loading}
           />
         </>
       )}
 
       {showForm && (
-        <CardWithForm
+        <UpdateAndCreateForm
           onClose={handleCloseForm}
           onSuccess={handleSuccess}
+          id={selectedId}
         />
       )}
     </div>

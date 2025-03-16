@@ -1,8 +1,16 @@
 import { CustomColumnDef } from "@/components/ui/data-table";
 import { RowData } from "@tanstack/react-table";
-import { ColumnsProps } from "./types";
+import { Pencil, Trash } from "lucide-react";
+import { ColumnsProps, Director } from "./types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-export const columns = ({}: ColumnsProps): CustomColumnDef<RowData>[] => [
+export const columns = ({
+  handleOpenForm,
+}: ColumnsProps): CustomColumnDef<RowData>[] => [
   {
     accessorKey: "nombres",
     header: "Nombre",
@@ -26,5 +34,40 @@ export const columns = ({}: ColumnsProps): CustomColumnDef<RowData>[] => [
     header: "Fecha de actualización",
     enableSorting: true,
     canHide: true,
+  },
+  {
+    accessorKey: "id",
+    header: "ACCIONES",
+    cell: ({ row }) => {
+      const director = row.original as Director;
+      return (
+        <div className="gap-4 flex">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span
+                onClick={() => handleOpenForm(String(director.id))}
+                className="cursor-pointer inline-flex items-center"
+              >
+                <Pencil size={18} />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>Actualizar</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span
+                onClick={() => {}}
+                className="cursor-pointer inline-flex items-center"
+              >
+                <Trash size={18} />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>Eliminar</TooltipContent>
+          </Tooltip>
+        </div>
+      );
+    },
+    canHide: false,
   },
 ];
