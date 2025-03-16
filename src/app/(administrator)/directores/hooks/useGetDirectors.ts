@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Director } from "../types";
 
-export const useGetDirectors = () => {
+export const useGetDirectors = (update: boolean) => {
   const [getDirectors, setGetDirectors] = useState<Director[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -25,7 +25,7 @@ export const useGetDirectors = () => {
     };
 
     fetchDirectores();
-  }, []);
+  }, [update]);
 
   return { getDirectors, loading, error };
 };
