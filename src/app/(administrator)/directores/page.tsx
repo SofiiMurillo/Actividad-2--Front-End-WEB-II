@@ -4,16 +4,20 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { useGetDirectors } from "./hooks/useGetDirectors";
+import { useDeleteDirector } from "./hooks/useDeleteDirector";
 import { Skull } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { useState } from "react";
 import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 const DirectorsPage = () => {
   const [update, setUpdate] = useState(false);
   const { getDirectors, loading, error } = useGetDirectors(update);
+  const { deleteDirector, loading: deleteLoading, error: deleteError } = useDeleteDirector();
   const [showForm, setShowForm] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const handleSuccess = () => {
@@ -29,6 +33,27 @@ const DirectorsPage = () => {
   const handleCloseForm = () => {
     setShowForm(false);
     setSelectedId(null);
+  };
+
+  const handleOpenDeleteConfirmation = (id: string) => {
+    setSelectedId(id);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setShowDeleteConfirmation(false);
+    setSelectedId(null);
+  };
+
+  const handleDeleteDirector = async () => {
+    await deleteDirector(selectedId);
+    if (!deleteError) {
+      toast.success("Director eliminado con éxito");
+      setUpdate(!update);
+    } else {
+      toast.error("Error al eliminar el director");
+    }
+    handleCloseDeleteConfirmation();
   };
 
   return (
@@ -59,7 +84,7 @@ const DirectorsPage = () => {
           </Button>
           <DataTable
             data={getDirectors}
-            columns={columns({ handleOpenForm })}
+            columns={columns({ handleOpenForm, handleOpenDeleteConfirmation })}
             isLoading={loading}
           />
         </>
@@ -70,6 +95,15 @@ const DirectorsPage = () => {
           onClose={handleCloseForm}
           onSuccess={handleSuccess}
           id={selectedId}
+        />
+      )}
+
+      {showDeleteConfirmation && (
+        <ConfirmDialog
+          title="Eliminar Director"
+          description="¿Estás seguro de que deseas eliminar este director?"
+          onConfirm={handleDeleteDirector}
+          onCancel={handleCloseDeleteConfirmation}
         />
       )}
     </div>
