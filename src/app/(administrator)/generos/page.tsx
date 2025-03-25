@@ -4,16 +4,24 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { useGetGenres } from "./hooks/useGetGenres";
+import { useDeleteGenre } from "./hooks/useDeleteGenres";
 import { Skull } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { useState } from "react";
 import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
-const GenresPage = () => {
+const GenrePage = () => {
   const [update, setUpdate] = useState(false);
   const { getGenres, loading, error } = useGetGenres(update);
+  const {
+    deleteGenre,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useDeleteGenre();
   const [showForm, setShowForm] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const handleSuccess = () => {
@@ -33,13 +41,34 @@ const GenresPage = () => {
     setSelectedId(null);
   };
 
+  const handleOpenDeleteConfirmation = (id: string) => {
+    setSelectedId(id);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setShowDeleteConfirmation(false);
+    setSelectedId(null);
+  };
+
+  const handleDeleteGenre = async () => {
+    await deleteGenre(selectedId);
+    if (!deleteError) {
+      toast.success("Genero eliminado con éxito");
+      setUpdate(!update);
+    } else {
+      toast.error("Error al eliminar el Genero");
+    }
+    handleCloseDeleteConfirmation();
+  };
+
   return (
     <div className="flex h-full w-full flex-col p-6 gap-8">
       <h1 className="text-3xl font-bold">Géneros</h1>
 
       {error && (
         <h2 className="text-xl text-red-400 flex items-center gap-2 border border-red-400 p-4 rounded-xl">
-          <Skull />¡ Error interno en el servidor, comunícate con el
+          <Skull />¡ Error interno en el servidor, comunicate con el
           administrador !
         </h2>
       )}
@@ -61,7 +90,7 @@ const GenresPage = () => {
           </Button>
           <DataTable
             data={getGenres}
-            columns={columns({ handleOpenForm })}
+            columns={columns({ handleOpenForm, handleOpenDeleteConfirmation })}
             isLoading={loading}
           />
         </>
@@ -74,8 +103,17 @@ const GenresPage = () => {
           id={selectedId}
         />
       )}
+
+      {showDeleteConfirmation && (
+        <ConfirmDialog
+          title="Eliminar Genero"
+          description="¿Estás seguro de que deseas eliminar este genero?"
+          onConfirm={handleDeleteGenre}
+          onCancel={handleCloseDeleteConfirmation}
+        />
+      )}
     </div>
   );
 };
 
-export default GenresPage;
+export default GenrePage;

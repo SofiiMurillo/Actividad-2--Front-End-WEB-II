@@ -10,6 +10,7 @@ import {
 
 export const columns = ({
   handleOpenForm,
+  handleOpenDeleteConfirmation,
 }: ColumnsProps): CustomColumnDef<RowData>[] => [
   {
     accessorKey: "nombre",
@@ -29,7 +30,6 @@ export const columns = ({
       />
     ),
   },
-
   {
     accessorKey: "estado",
     header: "Estado",
@@ -70,7 +70,7 @@ export const columns = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <span
-                onClick={() => {}}
+                onClick={() => handleOpenDeleteConfirmation(String(genre.id))}
                 className="cursor-pointer inline-flex items-center"
               >
                 <Trash size={18} />
