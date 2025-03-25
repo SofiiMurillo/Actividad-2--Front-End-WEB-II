@@ -2,9 +2,16 @@ export interface Genre {
   id: number;
   nombre: string;
   descripcion: string;
-  estado: number;
+  estado: string;
   fecha_creacion: number;
   fecha_actualizacion: number;
 }
 
-export interface ColumnsProps {}
+export interface UpdateAndCreateForm {
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+export interface ColumnsProps {
+  handleOpenForm: (id: string) => void;
+}

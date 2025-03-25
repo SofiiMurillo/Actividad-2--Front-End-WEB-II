@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Genre } from "../types";
 
-export const useGetGenres = () => {
+export const useGetGenres = (update: boolean) => {
   const [getGenres, setGetGenres] = useState<Genre[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -25,7 +25,7 @@ export const useGetGenres = () => {
     };
 
     fetchGenres();
-  }, []);
+  }, [update]);
 
   return { getGenres, loading, error };
 };
