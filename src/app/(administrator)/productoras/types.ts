@@ -15,4 +15,5 @@ export interface UpdateAndCreateFormProps {
 
 export interface ColumnsProps {
   handleOpenForm: (id: string) => void;
+  handleOpenDeleteConfirmation: (id: string) => void;
 }

@@ -4,16 +4,24 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { useGetProducer } from "./hooks/useGetProducer";
+import { useDeleteProducer } from "./hooks/useDeleteProducer";
 import { Skull } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { useState } from "react";
 import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 const ProducerPage = () => {
   const [update, setUpdate] = useState(false);
   const { getProducer, loading, error } = useGetProducer(update);
+  const {
+    deleteProducer,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useDeleteProducer();
   const [showForm, setShowForm] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const handleSuccess = () => {
@@ -33,6 +41,27 @@ const ProducerPage = () => {
   const handleCloseForm = () => {
     setShowForm(false);
     setSelectedId(null);
+  };
+
+  const handleOpenDeleteConfirmation = (id: string) => {
+    setSelectedId(id);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setShowDeleteConfirmation(false);
+    setSelectedId(null);
+  };
+
+  const handleDeleteProducer = async () => {
+    await deleteProducer(selectedId);
+    if (!deleteError) {
+      toast.success("Genero eliminado con éxito");
+      setUpdate(!update);
+    } else {
+      toast.error("Error al eliminar el Genero");
+    }
+    handleCloseDeleteConfirmation();
   };
 
   return (
@@ -63,7 +92,7 @@ const ProducerPage = () => {
           </Button>
           <DataTable
             data={getProducer}
-            columns={columns({ handleOpenForm })}
+            columns={columns({ handleOpenForm, handleOpenDeleteConfirmation })}
             isLoading={loading}
           />
         </>
@@ -74,6 +103,15 @@ const ProducerPage = () => {
           onClose={handleCloseForm}
           onSuccess={handleSuccess}
           id={selectedId}
+        />
+      )}
+
+      {showDeleteConfirmation && (
+        <ConfirmDialog
+          title="Eliminar Productora"
+          description="¿Estás seguro de que deseas eliminar este productora?"
+          onConfirm={handleDeleteProducer}
+          onCancel={handleCloseDeleteConfirmation}
         />
       )}
     </div>
