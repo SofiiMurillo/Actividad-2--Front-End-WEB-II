@@ -10,6 +10,7 @@ import { Pencil, Trash } from "lucide-react";
 
 export const columns = ({
   handleOpenForm,
+  handleOpenDeleteConfirmation,
 }: ColumnsProps): CustomColumnDef<RowData>[] => [
   {
     accessorKey: "nombre",
@@ -63,7 +64,9 @@ export const columns = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <span
-                onClick={() => {}}
+                onClick={() =>
+                  handleOpenDeleteConfirmation(String(multimedia.id))
+                }
                 className="cursor-pointer inline-flex items-center"
               >
                 <Trash size={18} />
