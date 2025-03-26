@@ -8,4 +8,11 @@ export interface Producer {
   descripcion: string;
 }
 
-export interface ColumnsProps {}
+export interface UpdateAndCreateFormProps {
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+export interface ColumnsProps {
+  handleOpenForm: (id: string) => void;
+}
