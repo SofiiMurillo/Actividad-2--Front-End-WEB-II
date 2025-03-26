@@ -5,34 +5,79 @@ import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { useGetMultimedia } from "./hooks/useGetMultimedia";
 import { Skull } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
+import { useState } from "react";
+import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
+import { toast } from "sonner";
 
-export default function Producer() {
-  const {
-    getMultimedia,
-    loading: loadingGetMultimedia,
-    error: errorGetMultimedia,
-  } = useGetMultimedia();
+const MultimediaPage = () => {
+  const [update, setUpdate] = useState(false);
+  const { getMultimedia, loading, error } = useGetMultimedia(update);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  if (loadingGetMultimedia) {
-    return <div>Cargando...</div>;
-  }
+  const handleSuccess = () => {
+    setUpdate(!update);
+    toast.success(
+      selectedId
+        ? "Tipo de multimedia actualizado con éxito"
+        : "Tipo de multimedia agregado con éxito"
+    );
+  };
+
+  const handleOpenForm = (id?: string) => {
+    setSelectedId(id || null);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedId(null);
+  };
 
   return (
     <div className="flex h-full w-full flex-col p-6 gap-8">
-      <h1 className="text-3xl font-bold">Tipos de multimedia</h1>
+      <h1 className="text-3xl font-bold">Tipos de Multimedia</h1>
 
-      {errorGetMultimedia && (
+      {error && (
         <h2 className="text-xl text-red-400 flex items-center gap-2 border border-red-400 p-4 rounded-xl">
-          <Skull />¡ Error interno en el servidor, comunicate con el
+          <Skull />¡ Error interno en el servidor, comunícate con el
           administrador !
         </h2>
       )}
 
-      {!errorGetMultimedia && (
+      {loading && (
+        <div className="col-span-2 flex items-center justify-center fixed inset-0 bg-var--gris-base bg-background/80 z-50">
+          <Loader />
+        </div>
+      )}
+
+      {!error && (
         <>
-          <DataTable data={getMultimedia} columns={columns({})} />
+          <Button
+            className="w-50 bg-gray-800 hover:bg-gray-700 text-white cursor-pointer font-bold"
+            variant={"default"}
+            onClick={() => handleOpenForm()}
+          >
+            Agregar nuevo productora
+          </Button>
+          <DataTable
+            data={getMultimedia}
+            columns={columns({ handleOpenForm })}
+            isLoading={loading}
+          />
         </>
+      )}
+
+      {showForm && (
+        <UpdateAndCreateForm
+          onClose={handleCloseForm}
+          onSuccess={handleSuccess}
+          id={selectedId}
+        />
       )}
     </div>
   );
-}
+};
+
+export default MultimediaPage;

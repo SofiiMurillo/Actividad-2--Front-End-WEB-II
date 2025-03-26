@@ -6,4 +6,11 @@ export interface Multimedia {
   fecha_actualizacion: number;
 }
 
-export interface ColumnsProps {}
+export interface UpdateAndCreateFormProps {
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+export interface ColumnsProps {
+  handleOpenForm: (id: string) => void;
+}

@@ -1,22 +1,27 @@
 import { useState, useEffect } from "react";
 import { Multimedia } from "../types";
 
-export const useGetMultimedia = (update: boolean) => {
-  const [getMultimedia, setGetMultimedia] = useState<Multimedia[]>([]);
+export const useGetMultimediaById = (id: string | null) => {
+  const [multimedia, setMultimedia] = useState<Multimedia | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+
     const fetchMultimedia = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/tipos_multimedia`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/tipos_multimedia/${id}`
         );
         if (!response.ok) {
-          throw new Error("Error al obtener los tipos de multimedia");
+          throw new Error("Error al obtener la multimedia");
         }
         const data = await response.json();
-        setGetMultimedia(data);
+        setMultimedia(data[0]);
       } catch (error: any) {
         setError(true);
       } finally {
@@ -25,7 +30,7 @@ export const useGetMultimedia = (update: boolean) => {
     };
 
     fetchMultimedia();
-  }, [update]);
+  }, [id]);
 
-  return { getMultimedia, loading, error };
+  return { multimedia, loading, error };
 };
