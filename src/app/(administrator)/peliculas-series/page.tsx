@@ -8,8 +8,15 @@ import { useGetGenres } from '../generos/hooks/useGetGenres';
 import { useGetMultimedia } from '../multimedia/hooks/useGetMultimedia';
 import { useGetProducer } from '../productoras/hooks/useGetProducer';
 import CardPelicula from './components/card-pelicula';
+import { useState } from 'react';
+import { UpdateAndCreateForm } from './components/UpdateAndCreateForm';
+import { toast } from 'sonner';
 
 const PeliculasSeries = () => {
+  const [showForm, setShowForm] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [update, setUpdate] = useState(false);
+
   const { getMovies, loading, error } = useGetMovies();
   const { getDirectors, loading: loadingDirectors, error: errorDirectors } = useGetDirectors(true);
 
@@ -18,6 +25,21 @@ const PeliculasSeries = () => {
   const { getMultimedia, loading: loadingMultimedia, error: errorMultimedia } = useGetMultimedia(true);
 
   const { getProducer, loading: loadingProducer, error: errorproducer } = useGetProducer(true);
+
+  const handleOpenForm = (id?: string) => {
+    setSelectedId(id || null);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedId(null);
+  };
+
+  const handleSuccess = () => {
+    setUpdate(!update);
+    toast.success(selectedId ? 'Tipo de multimedia actualizado con éxito' : 'Tipo de multimedia agregado con éxito');
+  };
 
   return (
     <div className="flex h-full w-full flex-col p-6 gap-8">
@@ -47,15 +69,23 @@ const PeliculasSeries = () => {
             const productora = getProducer.find((productora) => productora.id === movie.productora_id);
 
             return (
-              <CardPelicula key={movie.id} movie={movie} director={director} genero={genero} multimedia={multimedia} productora={productora}/>
+              <CardPelicula
+                key={movie.id}
+                movie={movie}
+                director={director}
+                genero={genero}
+                multimedia={multimedia}
+                productora={productora}
+              />
             );
           })}
         </div>
       )}
+      {showForm && <UpdateAndCreateForm onClose={handleCloseForm} onSuccess={handleSuccess} id={selectedId} />}
       <button
         className="fixed bottom-8 right-8 bg-purple-700 text-white p-3 rounded-full shadow-lg hover:bg-purple-800 focus:outline-none"
         aria-label="Agregar película"
-        onClick={() => alert('Agregar película')}
+        onClick={() => handleOpenForm()}
       >
         <Plus size={24} />
       </button>

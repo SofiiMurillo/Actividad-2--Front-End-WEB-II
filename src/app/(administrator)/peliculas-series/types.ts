@@ -14,3 +14,8 @@ export interface Peliculas {
   estado: boolean;
   serial: string;
 }
+
+export interface UpdateAndCreateFormProps {
+  onClose: () => void;
+  onSuccess: () => void;
+}
