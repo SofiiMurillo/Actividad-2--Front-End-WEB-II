@@ -1,16 +1,7 @@
 import { CirclePlay, Pencil, Plus, Trash } from 'lucide-react';
 import { Tooltip } from '@radix-ui/react-tooltip';
 import { TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Peliculas } from '../types';
-
-interface CardPeliculaProps {
-  movie: Peliculas;
-  director?: { nombres: string };
-  genero?: { nombre: string };
-  multimedia?: { nombre: string };
-  productora?: { nombre: string };
-  handleOpenForm: (id: string) => void;
-}
+import { CardPeliculaProps } from '../types';
 
 const CardPelicula: React.FC<CardPeliculaProps> = ({
   movie,
@@ -19,6 +10,7 @@ const CardPelicula: React.FC<CardPeliculaProps> = ({
   multimedia,
   productora,
   handleOpenForm,
+  handleOpenDeleteConfirmation,
 }) => {
   return (
     <div
@@ -113,7 +105,10 @@ const CardPelicula: React.FC<CardPeliculaProps> = ({
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span onClick={() => alert('Eliminar')} className="cursor-pointer inline-flex items-center">
+                <span
+                  onClick={() => handleOpenDeleteConfirmation(String(movie.id))}
+                  className="cursor-pointer inline-flex items-center"
+                >
                   <Trash size={18} className="text-purple-900" />
                 </span>
               </TooltipTrigger>

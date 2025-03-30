@@ -11,20 +11,44 @@ import CardPelicula from './components/card-pelicula';
 import { useState } from 'react';
 import { UpdateAndCreateForm } from './components/UpdateAndCreateForm';
 import { toast } from 'sonner';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { useDeleteMovie } from './hooks/useDeleteMovie';
 
 const PeliculasSeries = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [update, setUpdate] = useState(false);
 
-  const { getMovies, loading, error } = useGetMovies(update);
+  const { getMovies, loading: loadingMovies, error } = useGetMovies(update);
   const { getDirectors, loading: loadingDirectors, error: errorDirectors } = useGetDirectors(true);
-
   const { getGenres, loading: loadingGenres, error: errorGenres } = useGetGenres(true);
-
   const { getMultimedia, loading: loadingMultimedia, error: errorMultimedia } = useGetMultimedia(true);
-
   const { getProducer, loading: loadingProducer, error: errorproducer } = useGetProducer(true);
+  const { deleteMovie, loading: deleteLoading, error: deleteError } = useDeleteMovie();
+
+  const loading = loadingMovies || loadingDirectors || loadingGenres || loadingMultimedia || loadingProducer;
+
+  const handleOpenDeleteConfirmation = (id: string) => {
+    setSelectedId(id);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleDeletePelicula = async () => {
+    await deleteMovie(selectedId);
+    if (!deleteError) {
+      toast.success('Pelicula eliminada con éxito');
+      setUpdate(!update);
+    } else {
+      toast.error('Error al eliminar la pelicula');
+    }
+    handleCloseDeleteConfirmation();
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setShowDeleteConfirmation(false);
+    setSelectedId(null);
+  };
 
   const handleOpenForm = (id?: string) => {
     setSelectedId(id || null);
@@ -77,6 +101,7 @@ const PeliculasSeries = () => {
                   multimedia={multimedia}
                   productora={productora}
                   handleOpenForm={handleOpenForm}
+                  handleOpenDeleteConfirmation={handleOpenDeleteConfirmation}
                 />
               );
             })}
@@ -92,6 +117,15 @@ const PeliculasSeries = () => {
           generos={getGenres}
           productoras={getProducer}
           tiposMultimedia={getMultimedia}
+        />
+      )}
+
+      {showDeleteConfirmation && (
+        <ConfirmDialog
+          title="Eliminar Pelicula"
+          description="¿Estás seguro de que deseas eliminar esta pelicula?"
+          onConfirm={handleDeletePelicula}
+          onCancel={handleCloseDeleteConfirmation}
         />
       )}
       <button

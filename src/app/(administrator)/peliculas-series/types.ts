@@ -23,3 +23,13 @@ export interface UpdateAndCreateFormProps {
   productoras: any;
   tiposMultimedia: any;
 }
+
+export interface CardPeliculaProps {
+  movie: Peliculas;
+  director?: { nombres: string };
+  genero?: { nombre: string };
+  multimedia?: { nombre: string };
+  productora?: { nombre: string };
+  handleOpenForm: (id: string) => void;
+  handleOpenDeleteConfirmation: (id: string) => void;
+}
