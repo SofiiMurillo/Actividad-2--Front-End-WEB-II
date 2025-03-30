@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Peliculas } from "../types";
 
-export const useGetMovies = () => {
+export const useGetMovies = (update: boolean) => {
   const [getMovies, setGetMovies] = useState<Peliculas[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,14 +14,14 @@ export const useGetMovies = () => {
         );
         const data = await response.json();
         setGetMovies(data);
-      } catch (err) {
+      } catch (err: any) {
         setError(err);
       } finally {
         setLoading(false);
       }
     };
     fetchMovies();
-  }, []);
+  }, [update]);
 
   return { getMovies, loading, error };
 };

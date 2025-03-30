@@ -1,29 +1,28 @@
 import { CirclePlay, Pencil, Plus, Trash } from 'lucide-react';
 import { Tooltip } from '@radix-ui/react-tooltip';
 import { TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Peliculas } from '../types';
 
 interface CardPeliculaProps {
-  movie: {
-    imagen_portada: string;
-    titulo: string;
-    sinopsis: string;
-    fecha_creacion: string;
-    fecha_actualizacion: string;
-    ano_estreno: number;
-    estado: boolean;
-    serial: string;
-    url_pelicula: string;
-  };
+  movie: Peliculas;
   director?: { nombres: string };
   genero?: { nombre: string };
   multimedia?: { nombre: string };
   productora?: { nombre: string };
+  handleOpenForm: (id: string) => void;
 }
 
-const CardPelicula: React.FC<CardPeliculaProps> = ({ movie, director, genero, multimedia, productora }) => {
+const CardPelicula: React.FC<CardPeliculaProps> = ({
+  movie,
+  director,
+  genero,
+  multimedia,
+  productora,
+  handleOpenForm,
+}) => {
   return (
     <div
-      aria-label='card-pelicula'
+      aria-label="card-pelicula"
       className="bg-sidebar shadow-purple-700 rounded-lg overflow-hidden border border-purple-900 h-auto flex flex-col min-h-[400px]"
     >
       <div className="flex-grow">
@@ -103,7 +102,10 @@ const CardPelicula: React.FC<CardPeliculaProps> = ({ movie, director, genero, mu
           <div className="gap-4 flex">
             <Tooltip>
               <TooltipTrigger asChild>
-                <span onClick={() => alert('Actualizar')} className="cursor-pointer inline-flex items-center">
+                <span
+                  onClick={() => handleOpenForm(String(movie.id))}
+                  className="cursor-pointer inline-flex items-center"
+                >
                   <Pencil size={18} className="text-purple-900" />
                 </span>
               </TooltipTrigger>

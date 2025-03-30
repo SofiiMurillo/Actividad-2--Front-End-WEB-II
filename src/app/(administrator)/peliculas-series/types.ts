@@ -11,6 +11,15 @@ export interface Peliculas {
   director_id: number;
   productora_id: number;
   tipo_id: number;
-  estado: boolean;
+  estado: string;
   serial: string;
+}
+
+export interface UpdateAndCreateFormProps {
+  onClose: () => void;
+  onSuccess: () => void;
+  directores: any;
+  generos: any;
+  productoras: any;
+  tiposMultimedia: any;
 }

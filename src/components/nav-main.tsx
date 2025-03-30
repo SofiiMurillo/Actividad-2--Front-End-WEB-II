@@ -29,8 +29,6 @@ export function NavMain({
   const router = useRouter();
 
   const handleNavigation = (url: string) => {
-    console.log("pathname", pathname);
-    console.log("url", url);
     if (pathname !== url) {
       router.push(url);
     }
