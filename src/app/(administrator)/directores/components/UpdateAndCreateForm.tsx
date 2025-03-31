@@ -117,7 +117,6 @@ export function UpdateAndCreateForm({
             fecha_creacion: fechaCreacion,
             fecha_actualizacion: fechaActualizacion,
           });
-          console.log("Formulario actualizado correctamente");
         } else {
           await postDirector({
             nombres: nombre,
@@ -125,7 +124,6 @@ export function UpdateAndCreateForm({
             fecha_creacion: fechaCreacion,
             fecha_actualizacion: fechaActualizacion,
           });
-          console.log("Formulario enviado correctamente");
         }
         onSuccess();
         onClose();

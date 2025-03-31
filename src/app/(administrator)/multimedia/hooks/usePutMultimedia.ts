@@ -26,7 +26,6 @@ export const usePutMultimedia = () => {
           body: JSON.stringify(multimedia),
         }
       );
-      console.log("response");
       if (!response.ok) {
         throw new Error("Error al actualizar el tipo de multimedia");
       }

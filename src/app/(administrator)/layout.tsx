@@ -4,8 +4,8 @@ import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Asesores - Phonix Contact",
-  description: "Panel de asesores de Phonix Contact",
+  title: "Peliculas Sofi",
+  description: "Entorno admiinistrativo de peliculas y series",
 };
 
 export default function UserLayout({
