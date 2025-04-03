@@ -55,11 +55,11 @@ const ProducerPage = () => {
 
   const handleDeleteProducer = async () => {
     await deleteProducer(selectedId);
-    if (!deleteError) {
+    if (deleteError === null) {
       toast.success("Productora eliminado con éxito");
       setUpdate(!update);
-    } else {
-      toast.error("Error al eliminar la productora");
+    } if (deleteError) {
+      toast.error(deleteError);
     }
     handleCloseDeleteConfirmation();
   };
