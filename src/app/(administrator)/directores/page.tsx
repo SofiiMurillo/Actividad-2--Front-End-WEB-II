@@ -47,11 +47,12 @@ const DirectorsPage = () => {
 
   const handleDeleteDirector = async () => {
     await deleteDirector(selectedId);
-    if (!deleteError) {
+    if (deleteError === null) {
       toast.success("Director eliminado con éxito");
       setUpdate(!update);
-    } else {
-      toast.error("Error al eliminar el director");
+    } 
+    if (deleteError) { 
+      toast.error(deleteError);
     }
     handleCloseDeleteConfirmation();
   };

@@ -1,28 +1,27 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useDeleteDirector = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const deleteDirector = async (id: string | null) => {
     if (!id) return;
 
     setLoading(true);
-    setError(false);
+    setError(null);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/directores/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/directores/${id}`, {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error("Error al eliminar el director");
+        throw new Error(data.message || 'Ocurrió un error inesperado');
       }
     } catch (error: any) {
-      setError(true);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
