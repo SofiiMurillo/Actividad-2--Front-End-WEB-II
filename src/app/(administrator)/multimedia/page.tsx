@@ -55,11 +55,11 @@ const MultimediaPage = () => {
 
   const handleDeleteMultimedia = async () => {
     await deleteMultimedia(selectedId);
-    if (!deleteError) {
+    if (deleteError === null ) {
       toast.success("Tipo de multimedia eliminado con éxito");
       setUpdate(!update);
-    } else {
-      toast.error("Error al eliminar el tipo de multimedia");
+    } if (deleteError) {
+      toast.error(deleteError);
     }
     handleCloseDeleteConfirmation();
   };
