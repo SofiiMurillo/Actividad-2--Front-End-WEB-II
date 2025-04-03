@@ -53,11 +53,12 @@ const GenrePage = () => {
 
   const handleDeleteGenre = async () => {
     await deleteGenre(selectedId);
-    if (!deleteError) {
+    if (deleteError === null) {
       toast.success("Genero eliminado con éxito");
       setUpdate(!update);
-    } else {
-      toast.error("Error al eliminar el Genero");
+    }
+    if (deleteError) {
+      toast.error(deleteError)
     }
     handleCloseDeleteConfirmation();
   };
