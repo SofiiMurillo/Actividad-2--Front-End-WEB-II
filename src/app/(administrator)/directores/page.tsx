@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./columns";
-import { useGetDirectors } from "./hooks/useGetDirectors";
-import { useDeleteDirector } from "./hooks/useDeleteDirector";
-import { Skull } from "lucide-react";
-import { Loader } from "@/components/ui/loader";
-import { useState } from "react";
-import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
-import { toast } from "sonner";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
+import { columns } from './columns';
+import { useGetDirectors } from './hooks/useGetDirectors';
+import { useDeleteDirector } from './hooks/useDeleteDirector';
+import { Skull } from 'lucide-react';
+import { Loader } from '@/components/ui/loader';
+import { useEffect, useState } from 'react';
+import { UpdateAndCreateForm } from './components/UpdateAndCreateForm';
+import { toast } from 'sonner';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 
 const DirectorsPage = () => {
   const [update, setUpdate] = useState(false);
@@ -19,10 +19,11 @@ const DirectorsPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [deleteAction, setDeleteAction] = useState(false);
 
   const handleSuccess = () => {
     setUpdate(!update);
-    toast.success(selectedId ? "Director actualizado con éxito" : "Director agregado con éxito");
+    toast.success(selectedId ? 'Director actualizado con éxito' : 'Director agregado con éxito');
   };
 
   const handleOpenForm = (id?: string) => {
@@ -47,15 +48,21 @@ const DirectorsPage = () => {
 
   const handleDeleteDirector = async () => {
     await deleteDirector(selectedId);
-    if (deleteError === null) {
-      toast.success("Director eliminado con éxito");
-      setUpdate(!update);
-    } 
-    if (deleteError) { 
-      toast.error(deleteError);
-    }
+    setUpdate(!update);
+    setDeleteAction(true);
     handleCloseDeleteConfirmation();
   };
+
+  useEffect(() => {
+    if (deleteError === null && deleteAction )  {
+      toast.success('Director eliminado con éxito');
+      setDeleteAction(false);
+    }
+    if (deleteError && deleteAction) {
+      toast.error(deleteError);
+      setDeleteAction(false);
+    }
+  }, [deleteError, update, deleteAction]);
 
   return (
     <div className="flex h-full w-full flex-col p-6 gap-8">
@@ -63,8 +70,7 @@ const DirectorsPage = () => {
 
       {error && (
         <h2 className="text-xl text-red-400 flex items-center gap-2 border border-red-400 p-4 rounded-xl">
-          <Skull />¡ Error interno en el servidor, comunicate con el
-          administrador !
+          <Skull />¡ Error interno en el servidor, comunicate con el administrador !
         </h2>
       )}
 
@@ -78,7 +84,7 @@ const DirectorsPage = () => {
         <>
           <Button
             className="w-50 bg-gray-800 hover:bg-gray-700 text-white cursor-pointer font-bold"
-            variant={"default"}
+            variant={'default'}
             onClick={() => handleOpenForm()}
           >
             Agregar nuevo director
@@ -91,13 +97,7 @@ const DirectorsPage = () => {
         </>
       )}
 
-      {showForm && (
-        <UpdateAndCreateForm
-          onClose={handleCloseForm}
-          onSuccess={handleSuccess}
-          id={selectedId}
-        />
-      )}
+      {showForm && <UpdateAndCreateForm onClose={handleCloseForm} onSuccess={handleSuccess} id={selectedId} />}
 
       {showDeleteConfirmation && (
         <ConfirmDialog
