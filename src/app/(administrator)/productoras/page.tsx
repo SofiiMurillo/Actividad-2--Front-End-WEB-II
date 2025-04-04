@@ -7,7 +7,7 @@ import { useGetProducer } from "./hooks/useGetProducer";
 import { useDeleteProducer } from "./hooks/useDeleteProducer";
 import { Skull } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -23,6 +23,9 @@ const ProducerPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [deleteAction, setDeleteAction] = useState(false)
+  
+
 
   const handleSuccess = () => {
     setUpdate(!update);
@@ -55,14 +58,20 @@ const ProducerPage = () => {
 
   const handleDeleteProducer = async () => {
     await deleteProducer(selectedId);
-    if (deleteError === null) {
-      toast.success("Productora eliminado con éxito");
-      setUpdate(!update);
-    } if (deleteError) {
-      toast.error(deleteError);
-    }
+    setUpdate(!update);
+    setDeleteAction(true)
     handleCloseDeleteConfirmation();
   };
+  useEffect(() => {
+    if (deleteError === null && deleteAction) {
+      toast.success('Productora eliminada con éxito')
+      setDeleteAction(false);
+    }
+    if (deleteError && deleteAction) {
+      toast.error(deleteError)
+      setDeleteAction(false)
+    }
+  }, [deleteError, update, deleteAction]);
 
   return (
     <div className="flex h-full w-full flex-col p-6 gap-8">

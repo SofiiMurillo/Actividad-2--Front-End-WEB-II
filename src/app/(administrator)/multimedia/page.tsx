@@ -54,7 +54,7 @@ const MultimediaPage = () => {
   };
   useEffect(() => {
     if (deleteError === null && deleteAction) {
-      toast.success('Genero eliminado con éxito');
+      toast.success('Tipo de multimedia eliminado con éxito');
       setDeleteAction(false);
     }
     if (deleteError && deleteAction) {
