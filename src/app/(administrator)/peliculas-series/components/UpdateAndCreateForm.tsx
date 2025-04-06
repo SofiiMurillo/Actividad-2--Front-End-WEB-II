@@ -21,6 +21,7 @@ export function UpdateAndCreateForm({
   productoras,
   tiposMultimedia,
 }: UpdateAndCreateFormProps & { id: string | null }) {
+  const [valid, setValid] = React.useState(true);
   const [titulo, setTitulo] = React.useState('');
   const [estado, setEstado] = React.useState('');
   const [sinopsis, setSinopsis] = React.useState('');
@@ -78,7 +79,6 @@ export function UpdateAndCreateForm({
   }, [pelicula]);
 
   const validate = () => {
-    let valid = true;
     const newErrors = {
       titulo: '',
       sinopsis: '',
@@ -96,55 +96,55 @@ export function UpdateAndCreateForm({
     };
     if (!titulo) {
       newErrors.titulo = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!sinopsis) {
       newErrors.sinopsis = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!url_pelicula) {
       newErrors.url_pelicula = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!imagen_portada) {
       newErrors.imagen_portada = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!ano_estreno) {
       newErrors.ano_estreno = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!fecha_creacion) {
       newErrors.fecha_creacion = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!fecha_actualizacion) {
       newErrors.fecha_actualizacion = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!genero_id) {
       newErrors.genero_id = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!director_id) {
       newErrors.director_id = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!productora_id) {
       newErrors.productora_id = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!tipo_id) {
       newErrors.tipo_id = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!estado) {
       newErrors.estado = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     if (!serial) {
       newErrors.serial = 'Este campo es obligatorio';
-      valid = false;
+      setValid(false);
     }
     setErrors(newErrors);
     return valid;
@@ -330,7 +330,7 @@ export function UpdateAndCreateForm({
                         <SelectValue placeholder="Seleccionar el director" />
                       </SelectTrigger>
                       <SelectContent position="popper">
-                        {directores.map((director: any) => (
+                        {directores.map((director) => (
                           <SelectItem key={director.id} value={String(director.id)}>
                             {director.nombres}
                           </SelectItem>
@@ -347,7 +347,7 @@ export function UpdateAndCreateForm({
                         <SelectValue placeholder="Seleccionar el director" />
                       </SelectTrigger>
                       <SelectContent position="popper">
-                        {generos.map((genero: any) => (
+                        {generos.map((genero) => (
                           <SelectItem key={genero.id} value={String(genero.id)}>
                             {genero.nombre}
                           </SelectItem>
@@ -366,7 +366,7 @@ export function UpdateAndCreateForm({
                         <SelectValue placeholder="Seleccione una productora" />
                       </SelectTrigger>
                       <SelectContent position="popper">
-                        {productoras.map((productora: any) => (
+                        {productoras.map((productora) => (
                           <SelectItem key={productora.id} value={String(productora.id)}>
                             {productora.nombre}
                           </SelectItem>
@@ -383,7 +383,7 @@ export function UpdateAndCreateForm({
                         <SelectValue placeholder="Seleccionar el tipo de multimedia" />
                       </SelectTrigger>
                       <SelectContent position="popper">
-                        {tiposMultimedia.map((multimedia: any) => (
+                        {tiposMultimedia.map((multimedia) => (
                           <SelectItem key={multimedia.id} value={String(multimedia.id)}>
                             {multimedia.nombre}
                           </SelectItem>

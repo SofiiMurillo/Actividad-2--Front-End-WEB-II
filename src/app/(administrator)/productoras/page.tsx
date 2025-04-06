@@ -14,7 +14,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 const ProducerPage = () => {
   const [update, setUpdate] = useState(false);
-  const { getProducer, loading, error } = useGetProducer(update);
+  const { getProducer, loading: loadingProducer, error } = useGetProducer(update);
   const {
     deleteProducer,
     loading: deleteLoading,
@@ -24,9 +24,9 @@ const ProducerPage = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [deleteAction, setDeleteAction] = useState(false)
+
+  const loading = deleteLoading || loadingProducer;
   
-
-
   const handleSuccess = () => {
     setUpdate(!update);
     toast.success(
@@ -62,6 +62,7 @@ const ProducerPage = () => {
     setDeleteAction(true)
     handleCloseDeleteConfirmation();
   };
+
   useEffect(() => {
     if (deleteError === null && deleteAction) {
       toast.success('Productora eliminada con éxito')

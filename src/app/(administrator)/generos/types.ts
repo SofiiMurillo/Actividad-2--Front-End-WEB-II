@@ -7,7 +7,7 @@ export interface Genre {
   fecha_actualizacion: number;
 }
 
-export interface UpdateAndCreateForm {
+export interface UpdateAndCreateFormProps {
   onClose: () => void;
   onSuccess: () => void;
 }

@@ -58,7 +58,8 @@ const MultimediaPage = () => {
       setDeleteAction(false);
     }
     if (deleteError && deleteAction) {
-      toast.error(deleteError), setDeleteAction(false);
+      toast.error(deleteError);
+      setDeleteAction(false);
     }
   }, [deleteError, update, deleteAction]);
 

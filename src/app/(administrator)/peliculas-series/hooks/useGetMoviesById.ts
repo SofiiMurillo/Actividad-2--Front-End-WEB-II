@@ -20,7 +20,7 @@ export const useGetMoviesById = (id: string | null) => {
         }
         const data = await response.json();
         setPelicula(data[0]);
-      } catch (error: any) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

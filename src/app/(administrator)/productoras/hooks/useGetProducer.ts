@@ -17,7 +17,7 @@ export const useGetProducer = (update: boolean) => {
         }
         const data = await response.json();
         setGetProducer(data);
-      } catch (error: any) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

@@ -74,7 +74,7 @@ const GenrePage = () => {
         </h2>
       )}
 
-      {loading && (
+      {loading && deleteLoading && (
         <div className="col-span-2 flex items-center justify-center fixed inset-0 bg-var--gris-base bg-background/80 z-50">
           <Loader />
         </div>

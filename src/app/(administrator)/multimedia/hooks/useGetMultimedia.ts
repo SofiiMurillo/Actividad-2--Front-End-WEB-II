@@ -17,7 +17,7 @@ export const useGetMultimedia = (update: boolean) => {
         }
         const data = await response.json();
         setGetMultimedia(data);
-      } catch (error: any) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

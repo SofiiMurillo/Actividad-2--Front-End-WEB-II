@@ -22,7 +22,7 @@ export const useGetGenreById = (id: string | null) => {
         }
         const data = await response.json();
         setGenre(data[0]);
-      } catch (error: any) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

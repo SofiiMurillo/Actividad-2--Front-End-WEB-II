@@ -22,8 +22,8 @@ export const useDeleteMultimedia = () => {
       if (!response.ok) {
         throw new Error(data.message ||  "Error al eliminar la productora");
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      setError((error as Error).message);
     } finally {
       setLoading(false);
     }

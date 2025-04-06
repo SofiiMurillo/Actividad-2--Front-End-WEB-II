@@ -35,8 +35,8 @@ export const usePutProducer = () => {
 
       const data = await response.json();
       return data;
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      setError((error as Error).message);
       throw error;
     } finally {
       setLoading(false);

@@ -20,8 +20,8 @@ export const useDeleteDirector = () => {
       if (!response.ok) {
         throw new Error(data.message || 'Ocurrió un error inesperado');
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      setError((error as Error).message);
     } finally {
       setLoading(false);
     }

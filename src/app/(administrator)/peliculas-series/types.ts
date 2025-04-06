@@ -1,3 +1,8 @@
+import { Director } from './../directores/types'
+import { Genre } from './../generos/types';
+import { Producer } from './../productoras/types';
+import { Multimedia } from './../multimedia/types';
+
 export interface Peliculas {
   id: number;
   titulo: string;
@@ -18,10 +23,10 @@ export interface Peliculas {
 export interface UpdateAndCreateFormProps {
   onClose: () => void;
   onSuccess: () => void;
-  directores: any;
-  generos: any;
-  productoras: any;
-  tiposMultimedia: any;
+  directores: Director[];
+  generos: Genre[];
+  productoras: Producer[];
+  tiposMultimedia: Multimedia[];
 }
 
 export interface CardPeliculaProps {

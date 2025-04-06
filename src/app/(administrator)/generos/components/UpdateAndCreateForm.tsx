@@ -69,7 +69,7 @@ export function UpdateAndCreateForm({
   }, [genre]);
 
   const validate = () => {
-    let valid = true;
+    const valid = true;
     const newErrors = {
       nombre: "",
       descripcion: "",

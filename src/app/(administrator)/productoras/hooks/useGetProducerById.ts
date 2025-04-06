@@ -22,7 +22,7 @@ export const useGetProducerById = (id: string | null) => {
         }
         const data = await response.json();
         setProducer(data[0]);
-      } catch (error: any) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

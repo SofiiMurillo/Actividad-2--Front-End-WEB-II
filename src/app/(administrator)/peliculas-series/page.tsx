@@ -20,14 +20,15 @@ const PeliculasSeries = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [update, setUpdate] = useState(false);
 
-  const { getMovies, loading: loadingMovies, error } = useGetMovies(update);
+  const { getMovies, loading: loadingMovies, error: errorMovies } = useGetMovies(update);
   const { getDirectors, loading: loadingDirectors, error: errorDirectors } = useGetDirectors(true);
   const { getGenres, loading: loadingGenres, error: errorGenres } = useGetGenres(true);
   const { getMultimedia, loading: loadingMultimedia, error: errorMultimedia } = useGetMultimedia(true);
-  const { getProducer, loading: loadingProducer, error: errorproducer } = useGetProducer(true);
+  const { getProducer, loading: loadingProducer, error: errorProducer } = useGetProducer(true);
   const { deleteMovie, loading: deleteLoading, error: deleteError } = useDeleteMovie();
 
-  const loading = loadingMovies || loadingDirectors || loadingGenres || loadingMultimedia || loadingProducer;
+  const loading = loadingMovies || loadingDirectors || loadingGenres || loadingMultimedia || loadingProducer || deleteLoading;
+  const error = errorDirectors || errorGenres || errorMultimedia || errorProducer || errorMovies;
 
   const handleOpenDeleteConfirmation = (id: string) => {
     setSelectedId(id);
