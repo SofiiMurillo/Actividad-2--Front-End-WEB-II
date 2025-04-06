@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useDeleteMultimedia = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const deleteMultimedia = async (id: string | null) => {
     if (!id) return;
 
     setLoading(true);
-    setError(false);
+    setError(null);
 
     try {
       const response = await fetch(
@@ -17,12 +17,13 @@ export const useDeleteMultimedia = () => {
           method: "DELETE",
         }
       );
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error("Error al eliminar la productora");
+        throw new Error(data.message ||  "Error al eliminar la productora");
       }
-    } catch (error: any) {
-      setError(true);
+    } catch (error) {
+      setError((error as Error).message);
     } finally {
       setLoading(false);
     }

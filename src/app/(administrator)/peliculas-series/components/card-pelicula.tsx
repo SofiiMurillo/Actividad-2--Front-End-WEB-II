@@ -1,4 +1,4 @@
-import { CirclePlay, Pencil, Plus, Trash } from 'lucide-react';
+import { CirclePlay, Pencil, Trash } from 'lucide-react';
 import { Tooltip } from '@radix-ui/react-tooltip';
 import { TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { CardPeliculaProps } from '../types';

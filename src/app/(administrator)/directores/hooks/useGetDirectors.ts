@@ -17,7 +17,7 @@ export const useGetDirectors = (update: boolean) => {
         }
         const data = await response.json();
         setGetDirectors(data);
-      } catch (error: any) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

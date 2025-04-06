@@ -22,7 +22,7 @@ export const useGetMultimediaById = (id: string | null) => {
         }
         const data = await response.json();
         setMultimedia(data[0]);
-      } catch (error: any) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

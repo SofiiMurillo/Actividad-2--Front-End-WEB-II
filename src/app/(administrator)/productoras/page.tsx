@@ -7,14 +7,14 @@ import { useGetProducer } from "./hooks/useGetProducer";
 import { useDeleteProducer } from "./hooks/useDeleteProducer";
 import { Skull } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 const ProducerPage = () => {
   const [update, setUpdate] = useState(false);
-  const { getProducer, loading, error } = useGetProducer(update);
+  const { getProducer, loading: loadingProducer, error } = useGetProducer(update);
   const {
     deleteProducer,
     loading: deleteLoading,
@@ -23,7 +23,10 @@ const ProducerPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [deleteAction, setDeleteAction] = useState(false)
 
+  const loading = deleteLoading || loadingProducer;
+  
   const handleSuccess = () => {
     setUpdate(!update);
     toast.success(
@@ -55,14 +58,21 @@ const ProducerPage = () => {
 
   const handleDeleteProducer = async () => {
     await deleteProducer(selectedId);
-    if (!deleteError) {
-      toast.success("Productora eliminado con éxito");
-      setUpdate(!update);
-    } else {
-      toast.error("Error al eliminar la productora");
-    }
+    setUpdate(!update);
+    setDeleteAction(true)
     handleCloseDeleteConfirmation();
   };
+
+  useEffect(() => {
+    if (deleteError === null && deleteAction) {
+      toast.success('Productora eliminada con éxito')
+      setDeleteAction(false);
+    }
+    if (deleteError && deleteAction) {
+      toast.error(deleteError)
+      setDeleteAction(false)
+    }
+  }, [deleteError, update, deleteAction]);
 
   return (
     <div className="flex h-full w-full flex-col p-6 gap-8">

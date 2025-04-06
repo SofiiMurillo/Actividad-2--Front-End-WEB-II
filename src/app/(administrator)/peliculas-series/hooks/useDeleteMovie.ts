@@ -21,7 +21,7 @@ export const useDeleteMovie = () => {
       if (!response.ok) {
         throw new Error("Error al eliminar la película");
       }
-    } catch (error: any) {
+    } catch {
       setError(true);
     } finally {
       setLoading(false);

@@ -4,7 +4,8 @@ import { Peliculas } from "../types";
 export const useGetMovies = (update: boolean) => {
   const [getMovies, setGetMovies] = useState<Peliculas[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
+
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -14,8 +15,8 @@ export const useGetMovies = (update: boolean) => {
         );
         const data = await response.json();
         setGetMovies(data);
-      } catch (err: any) {
-        setError(err);
+      } catch (error) {
+        setError(error as Error);
       } finally {
         setLoading(false);
       }

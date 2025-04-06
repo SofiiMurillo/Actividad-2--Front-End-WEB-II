@@ -1,34 +1,29 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./columns";
-import { useGetGenres } from "./hooks/useGetGenres";
-import { useDeleteGenre } from "./hooks/useDeleteGenres";
-import { Skull } from "lucide-react";
-import { Loader } from "@/components/ui/loader";
-import { useState } from "react";
-import { UpdateAndCreateForm } from "./components/UpdateAndCreateForm";
-import { toast } from "sonner";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
+import { columns } from './columns';
+import { useGetGenres } from './hooks/useGetGenres';
+import { useDeleteGenre } from './hooks/useDeleteGenres';
+import { Skull } from 'lucide-react';
+import { Loader } from '@/components/ui/loader';
+import { useEffect, useState } from 'react';
+import { UpdateAndCreateForm } from './components/UpdateAndCreateForm';
+import { toast } from 'sonner';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 
 const GenrePage = () => {
   const [update, setUpdate] = useState(false);
   const { getGenres, loading, error } = useGetGenres(update);
-  const {
-    deleteGenre,
-    loading: deleteLoading,
-    error: deleteError,
-  } = useDeleteGenre();
+  const { deleteGenre, loading: deleteLoading, error: deleteError } = useDeleteGenre();
   const [showForm, setShowForm] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [deleteAction, setDeleAction] = useState(false);
 
   const handleSuccess = () => {
     setUpdate(!update);
-    toast.success(
-      selectedId ? "Género actualizado con éxito" : "Género agregado con éxito"
-    );
+    toast.success(selectedId ? 'Género actualizado con éxito' : 'Género agregado con éxito');
   };
 
   const handleOpenForm = (id?: string) => {
@@ -53,14 +48,21 @@ const GenrePage = () => {
 
   const handleDeleteGenre = async () => {
     await deleteGenre(selectedId);
-    if (!deleteError) {
-      toast.success("Genero eliminado con éxito");
-      setUpdate(!update);
-    } else {
-      toast.error("Error al eliminar el Genero");
-    }
+    setUpdate(!update);
+    setDeleAction(true);
     handleCloseDeleteConfirmation();
   };
+
+  useEffect(() => {
+    if (deleteError === null && deleteAction) {
+      toast.success('Director eliminado con éxito');
+      setDeleAction(false);
+    }
+    if (deleteError && deleteAction) {
+      toast.error(deleteError);
+      setDeleAction(false);
+    }
+  }, [deleteError, update, deleteAction]);
 
   return (
     <div className="flex h-full w-full flex-col p-6 gap-8">
@@ -68,12 +70,11 @@ const GenrePage = () => {
 
       {error && (
         <h2 className="text-xl text-red-400 flex items-center gap-2 border border-red-400 p-4 rounded-xl">
-          <Skull />¡ Error interno en el servidor, comunicate con el
-          administrador !
+          <Skull />¡ Error interno en el servidor, comunicate con el administrador !
         </h2>
       )}
 
-      {loading && (
+      {loading && deleteLoading && (
         <div className="col-span-2 flex items-center justify-center fixed inset-0 bg-var--gris-base bg-background/80 z-50">
           <Loader />
         </div>
@@ -83,7 +84,7 @@ const GenrePage = () => {
         <>
           <Button
             className="w-50 bg-gray-800 hover:bg-gray-700 text-white cursor-pointer font-bold"
-            variant={"default"}
+            variant={'default'}
             onClick={() => handleOpenForm()}
           >
             Agregar nuevo género
@@ -96,13 +97,7 @@ const GenrePage = () => {
         </>
       )}
 
-      {showForm && (
-        <UpdateAndCreateForm
-          onClose={handleCloseForm}
-          onSuccess={handleSuccess}
-          id={selectedId}
-        />
-      )}
+      {showForm && <UpdateAndCreateForm onClose={handleCloseForm} onSuccess={handleSuccess} id={selectedId} />}
 
       {showDeleteConfirmation && (
         <ConfirmDialog
